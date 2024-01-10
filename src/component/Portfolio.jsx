@@ -1,54 +1,20 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
-import bookshelf from "../assets/portfolio/Bookshelf.png";
-import wo from "../assets/portfolio/WO.png";
-import mealFinder from "../assets/portfolio/MealFinder.png";
-import restaurant from "../assets/portfolio/restauran-1.png";
-import fitlifehub from "../assets/portfolio/fitlifehub-1.png";
-import locrent from "../assets/portfolio/locrent.png";
-import bookshelfAPI from "../assets/portfolio/Bookshelf API.png";
+import { useState } from "react";
+import portfolios from "../data/portfolioData";
+import { Modal } from "flowbite-react";
 
 const Portfolio = () => {
-  const portfolios = [
-    {
-      id: 1,
-      src: wo,
-      repoUrl: "https://github.com/Abidr2002/Wedding_Organizer",
-    },
-    {
-      id: 2,
-      src: bookshelf,
-      repoUrl: "https://github.com/Abidr2002/BookshelfApps",
-    },
-    {
-      id: 3,
-      src: mealFinder,
-      repoUrl: "https://github.com/Abidr2002/meal-finder",
-    },
-    {
-      id: 4,
-      src: restaurant,
-      repoUrl: "https://github.com/Abidr2002/restaurant-PWA-testing",
-    },
-    {
-      id: 5,
-      src: fitlifehub,
-      repoUrl: "https://github.com/Abidr2002/Fitlife-Hub",
-    },
-    {
-      id: 6,
-      src: locrent,
-      repoUrl: "https://github.com/Abidr2002/FP_Pemweb",
-    },
-    {
-      id: 7,
-      src: bookshelfAPI,
-      repoUrl: "https://github.com/Abidr2002/Bookshelf-API",
-    },
-  ];
-
-  const openRepoLink = (url) => {
+  const openLink = (url) => {
     window.open(url, "_blank");
+  };
+
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const openProjectDetails = (project) => {
+    setSelectedProject(project);
+    setOpenModal(true);
   };
 
   return (
@@ -62,29 +28,73 @@ const Portfolio = () => {
             Portfolio
           </p>
           <p className="py-6 text-xl sm:text-2xl">
-            Berikut ini adalah beberapa tugas yang pernah saya kerjakan
+            These are some projects that I have worked on
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 sm:px-0">
-          {portfolios.map(({ id, src, repoUrl }) => (
+          {portfolios.map(({ id, img, title, desc, repoUrl, website }) => (
             <div key={id} className="shadow-md shadow-gray-600 rounded-lg">
-              <img
-                src={src}
-                alt=""
-                className="rounded-md duration-200 hover:scale-105"
-              />
+              <div className="flex items-center justify-center">
+                <img src={img} alt="" className="rounded-md" />
+              </div>
               <div className="flex items-center justify-center">
                 <button
                   className="w-1/2 px-6 py-3 m-4 duration-300 hover:scale-110"
-                  onClick={() => openRepoLink(repoUrl)}
+                  onClick={() =>
+                    openProjectDetails({
+                      id,
+                      img,
+                      title,
+                      desc,
+                      repoUrl,
+                      website,
+                    })
+                  }
                 >
-                  Code
+                  Detail
                 </button>
               </div>
             </div>
           ))}
         </div>
+        <Modal
+          show={openModal}
+          size={"6xl"}
+          onClose={() => setOpenModal(false)}
+        >
+          <Modal.Header className="flex text-center">
+            {selectedProject?.title}
+          </Modal.Header>
+          <Modal.Body className="text-justify">
+            <div className="space-y-6 flex flex-col">
+              <div className="flex justify-center">
+                <img
+                  src={selectedProject?.img}
+                  alt=""
+                  className="rounded-md w-4/5"
+                />
+              </div>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                {selectedProject?.desc}
+              </p>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="w-1/2 px-6 duration-300 hover:scale-110"
+              onClick={() => openLink(selectedProject?.repoUrl)}
+            >
+              Code
+            </button>
+            <button
+              className="w-1/2 px-6 duration-300 hover:scale-110"
+              onClick={() => openLink(selectedProject?.website)}
+            >
+              Website
+            </button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );

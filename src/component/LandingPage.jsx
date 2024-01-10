@@ -16,7 +16,7 @@ const Beranda = () => {
             <img
               src={FotoDiri}
               alt="my profile"
-              className="max-w-96 h-auto object-cover rounded-full m-auto"
+              className="w-4/5 h-auto object-cover rounded-full m-auto"
             />
           </div>
           <div className="flex flex-col justify-center w-full md:w-1/2 mt-12 md:mt-0 md:order-2">
